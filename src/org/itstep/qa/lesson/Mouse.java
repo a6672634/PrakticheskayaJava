@@ -1,7 +1,6 @@
 package org.itstep.qa.lesson;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Mouse {
     /* Игровое поле ограничено размерами 100х100 (координаты по х и у от 0 до 99)
@@ -30,32 +29,153 @@ public class Mouse {
 становиться такого цвета, какого был куст. При этом в командную строку выводится
 запись вида "Победила мышь Апокалиптина, она нашла куст в координатах ХХ:УУ и
 перекрасилась в цвет Баклажановый""*/
-    private int BORN_x;
-    private int BORN_y;
-    private int XX;
-    private int YY;
+    private final int FORCE_WING = 2;
+
+    private int startX;
+    private int stertY;
+    private int courentX;
+    private int courentY;
     private String name;
     private String color;
-    private int winter = 2;
 
-    public void StartMouse(int BORN_x, int BORN_y, String name, String color) {
-        this.BORN_x = BORN_x;
-        this.BORN_y = BORN_y;
+    private int dXRun;
+    private int dYRun;
+
+    private int dXDig;
+    private int dYDig;
+
+    private int sizeField;
+
+    public Mouse(int startX, int stertY, String name, int sizeField) {
+        this.startX = startX;
+        this.stertY = stertY;
+        this.courentX = startX;
+        this.courentY = stertY;
         this.name = name;
         this.color = "white";
+        dYRun = 1;
+        dYRun = 1;
+        dXRun = 5;
+        dYRun = 5;
+        this.sizeField =sizeField;
+
     }
 
-    public int MoveMouse(int XX, int YY) {
-        if ((XX + 1 + winter) >= 99){
-    } if ((YY + 1 + winter) >= 99);
-        return (((XX + 1 + winter) - 1)& ((YY + 1 + winter) -1));
-           }
+    public void setCourentX(int courentX) {
+        this.courentX = courentX;
+    }
 
-    public void TonelMouse(int DX, int DY, String name, String color) {
-        DX += 5;
-        DY += 5;
-        this.name = name;
+    public void setCourentY(int courentY) {
+        this.courentY = courentY;
+    }
+
+    public int getCourentX() {
+        return courentX;
+    }
+
+       public int getCourentY() {
+        return courentY;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
         this.color = color;
     }
+
+    public int getFORCE_WING() {
+        return FORCE_WING;
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        this.startX = startX;
+    }
+
+    public int getStertY() {
+        return stertY;
+    }
+
+    public void setStertY(int stertY) {
+        this.stertY = stertY;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getdXRun() {
+        return dXRun;
+    }
+
+    public void setdXRun(int dXRun) {
+        this.dXRun = dXRun;
+    }
+
+    public int getdYRun() {
+        return dYRun;
+    }
+
+    public void setdYRun(int dYRun) {
+        this.dYRun = dYRun;
+    }
+
+    public int getdXDig() {
+        return dXDig;
+    }
+
+    public void setdXDig(int dXDig) {
+        this.dXDig = dXDig;
+    }
+
+    public int getdYDig() {
+        return dYDig;
+    }
+
+    public void setdYDig(int dYDig) {
+        this.dYDig = dYDig;
+    }
+
+    public int getSizeField() {
+        return sizeField;
+    }
+
+    public void setSizeField(int sizeField) {
+        this.sizeField = sizeField;
+    }
+
+    public void runMouse() {
+       Random random = new Random();
+       int wingX = random.nextInt(FORCE_WING);
+       int wingY = random.nextInt(FORCE_WING);
+       dXRun = controlMouse(courentX, dXRun, wingX*dXRun);
+       dYRun = controlMouse(courentY, dYRun , wingY*dYRun );
+       courentX= courentX + dXRun + random.nextInt(FORCE_WING)*dXRun;
+       courentY= courentY + dYRun + random.nextInt(FORCE_WING)*dYRun;
+   }
+
+    public void dig(){
+        dXDig = controlMouse(courentX, dXDig, 0);
+        dYDig = controlMouse(courentY, dYDig, 0);
+        courentX = courentX + dXDig;
+        courentY = courentY + dYDig;
+    }
+
+   private int controlMouse(int current, int d, int wing){
+       int temp = current + d + wing;
+       if (temp >= sizeField || temp <0){
+           d = -d;
+       }
+       return  d;
+   }
 
 }
